@@ -123,6 +123,9 @@
 
       try {
         const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
         const data = await response.json();
 
         const resultsDiv = document.getElementById('food-results');
@@ -135,7 +138,7 @@
             foodItem.innerHTML = `
               <div class="card-body">
                 <h5 class="card-title">${item.name}</h5>
-                <p class="card-text">ক্যালোরি: ${item.calories} | প্রোটিন: ${item.protein_g}g</p>
+                <p class="card-text">ক্যালোরি: ${item.calories} | প্রোটিন: ${item.protein_g}g | কার্বোহাইড্রেট: ${item.carbohydrates_total_g}g | ফ্যাট: ${item.fat_total_g}g</p>
               </div>
             `;
             resultsDiv.appendChild(foodItem);
@@ -145,6 +148,7 @@
         }
       } catch (error) {
         alert('ডেটা লোড করতে সমস্যা হয়েছে।');
+        console.error('Fetch error:', error);
       }
     }
   </script>
