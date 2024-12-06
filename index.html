@@ -55,7 +55,7 @@
 <body>
   <header>
     <h1>দৈনিক রুটিন এবং পুষ্টি পরিকল্পনা</h1>
-    <p>আপনার রুটিন গুছিয়ে নিন এবং স্বাস্থ্যকর থাকুন।</p>
+    <p>আপনার রুটিন গুছিয়ে নিন এবং স্বাস্থ্যকর থাকুন।</p>
   </header>
 
   <div class="container">
@@ -90,29 +90,39 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+  <!-- Service Worker for PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(error) {
+          console.log('ServiceWorker registration failed: ', error);
+        });
+      });
+    }
+  </script>
+
   <!-- Custom JS -->
   <script>
     function markTaskComplete(button) {
       button.parentElement.classList.add('bg-success', 'text-white');
       button.disabled = true;
-      button.innerText = "সম্পন্ন হয়েছে";
+      button.innerText = "সম্পন্ন হয়েছে";
     }
 
     // Fetch Food Data using Calorie Ninja API
     async function fetchFoodData() {
-      const query = document.getElementById('food-search').value;
+      const query = document.getElementById('food-search').value.trim();
       if (!query) {
         alert('অনুগ্রহ করে খাবারের নাম লিখুন।');
         return;
       }
 
       const apiUrl = `https://api.calorieninjas.com/v1/nutrition?query=${query}`;
-      const apiKey = "YOUR_API_KEY"; // Replace with your Calorie Ninja API Key (if needed)
 
       try {
-        const response = await fetch(apiUrl, {
-          headers: { 'X-Api-Key': apiKey }
-        });
+        const response = await fetch(apiUrl);
         const data = await response.json();
 
         const resultsDiv = document.getElementById('food-results');
@@ -134,7 +144,7 @@
           resultsDiv.innerHTML = '<p class="text-danger">কোনো ফলাফল পাওয়া যায়নি।</p>';
         }
       } catch (error) {
-        alert('ডেটা লোড করতে সমস্যা হয়েছে।');
+        alert('ডেটা লোড করতে সমস্যা হয়েছে।');
       }
     }
   </script>
